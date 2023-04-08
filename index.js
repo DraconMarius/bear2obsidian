@@ -29,8 +29,9 @@ filesAndFolders.forEach(entry => {
         content = addCreationAndEditedDateFrontmatter(content, entryPath);
 
         // Find tags in the note
-        const tagRegex = /(^|\s)#(?:(\w+\/(?:[\w\s-]+\/)*[\w\s-]+)|(\w+))(?!\w)/g;
-        const tags = [...content.matchAll(tagRegex)].map(match => match[2] || match[3]);
+        const tagRegex = /(^|\W)#(?:(\w+(?:\/\w+)*)|(\w+))(?!\w)/g;
+        const tags = [...content.matchAll(tagRegex)].map(match => match[2] || match[3]).map(tag => tag.trim());
+        console.log(tags);
 
         // Replace Bear tags with Obsidian tags
         const obsidianContent = content.replace(tagRegex, (_, space, tagName1, tagName2) => {
@@ -45,25 +46,22 @@ filesAndFolders.forEach(entry => {
         // Save the note in the Obsidian vault
         let noteFolder = obsidianVaultFolderPath;
         if (tags.length > 0) {
-            const firstTag = tags[0];
-            const tagLevels = firstTag.split('/');
-            if (tagLevels.length > 1) {
-                noteFolder = path.join(obsidianVaultFolderPath, ...tagLevels);
-                noteFolder = noteFolder.replace(`${firstTag}/`, '');
-                if (!fs.existsSync(noteFolder)) {
-                    fs.mkdirSync(noteFolder, { recursive: true });
-                }
-            } else {
-                noteFolder = path.join(obsidianVaultFolderPath, firstTag);
-                if (!fs.existsSync(noteFolder)) {
-                    fs.mkdirSync(noteFolder, { recursive: true });
+            const firstTag = tags[0].trim(); // Trim the first tag to remove any leading or trailing white space characters
+            noteFolder = path.join(obsidianVaultFolderPath, firstTag);
+            if (!fs.existsSync(noteFolder)) {
+                const tagLevels = firstTag.split('/');
+                let folderPath = obsidianVaultFolderPath;
+                for (let i = 0; i < tagLevels.length; i++) {
+                    folderPath = path.join(folderPath, tagLevels[i]);
+                    if (!fs.existsSync(folderPath)) {
+                        fs.mkdirSync(folderPath, { recursive: true });
+                    }
                 }
             }
         }
         const noteTitle = entry.replace('.md', '');
         const newNotePath = path.join(noteFolder, noteTitle + '.md');
         if (fs.existsSync(newNotePath)) {
-            // If the note already exists in the folder, rename the note file to prevent overwriting
             let i = 1;
             while (fs.existsSync(`${newNotePath}_${i}.md`)) {
                 i++;
@@ -82,3 +80,5 @@ filesAndFolders.forEach(entry => {
         copySync(entryPath, newFolderPath);
     }
 });
+
+//test123
