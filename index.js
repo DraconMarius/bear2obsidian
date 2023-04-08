@@ -81,4 +81,3 @@ filesAndFolders.forEach(entry => {
     }
 });
 
-//test123
