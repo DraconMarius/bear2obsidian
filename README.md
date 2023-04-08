@@ -4,29 +4,34 @@
 
 ## Description
 
-Node.js script to duplicate an export directory of Bear Markdown Files, while handling updating the structure based on tags, assets, and backlink so one can easily export to Obsidian. It also reads the create/edit time for the files and prepend it to the export for Obsidian.
+A Node.js script to duplicate an export directory of Bear Markdown Files, while mimicking folder structures based on BearTags. It groups all the exported assets, and edits any backlinks so one can easily export to Obsidian. It also reads the create/edit time for the files and prepend it as a YAML block to the export for Obsidian.
 
 **Note**: 
 - [ ] Only read first tag in note (personal usecase)
 - [ ] Duplicated Note name not supported
-- [ ] Tags cannot have spaces (#tag 1/sub tag#)
+- [ ] Tags with spaces (#tag 1/sub tag#) will create folder, but thge obsidian tag itself might need manual fixing
 - [ ] Edge Cases in Tag formatting might experience errors
 - [x] Create/Edit Time
-> Create/Edit Time as YAML implemented. Not sure if able to get the created/edited time without hard coding so it will update as we edit these imported note. 
+> Create/Edit Time as YAML implemented. Not sure if able to retain the created/edited time without explicitely writing it to the file.
 
-*please note that this is just to automate the transition and make a tad bit easier, instead of manually sorting through your notes one by one. Please keep in mind that you might still have to make some adjustment and reorganize your notes once your got it imported to Obsidian!*
+*please note that this is mainly to automate the transition, and make it a tad bit easier for myself. Instead of manually sorting through your notes one by one and creating a folder manually. Please keep in mind that you might still have to make some fine-tune and reorganize your notes once your got it imported to Obsidian!*
 
 ## Usage
 
 **please make sure that you have the node.js installed**
 
-First, make sure that you export your Bear note with attachements as Markdown to a new folder named `BearExport`. 
+Make sure that you export your Bear note with attachements as Markdown to a new folder named `BearExport`. 
 
-> You can name the folder anything you want really, but you will have to edit the path to the source folder within the code!
+> You can name the folder anything you want really, but you will have to edit the path to the source folder within the code:
+```javascript
+// Make sure to change to the correct source and destination path!
+const bearNotesFolderPath = './BearExport'; //default points to a folder named "BearExport" in root
+const obsidianVaultFolderPath = './ObsidianExport'; //default points to empty folder in root
+```
 
-Then clone this respository to your local machine and copy the whole folder to the root of this repository. (double check that the copy of the Bear notes retain the accurate created/edited metadata after copying)
+Then clone this respository to your local machine and copy the whole folder to the root of this repository. (Double check that the copy of the Bear notes retain the accurate created/edited metadata after copying.)
 
-You can then run the following bash command at the root of the repository to install any required modules.
+You can then run the following bash command at the root of the repository to install any required dependency.
 
 ``` bash
     npm install
@@ -41,6 +46,16 @@ to initate the script. Once everything has been compiled, you should be able to 
 
 Now you can drag your content from the Obsidian Export folder into your Obsidian Vault Folder and then when you open Obsidian you should be able to access and start reorganizing your note in the new directory structure based off of your bear tag!
 
+## Additional Resources
+Here are some additional resources that was super helpful for my transistion to Bear and writing this simple script: 
+
+[How to successfully move notes from Bear to Obsidian by @alexandersnotes](https://medium.com/@alexandersnotes/how-to-move-notes-from-bear-to-obsidian-2fb4f62cdd72)
+
+[Use YAML Front Matter Correctly in Obsidian by @amyjuanli](https://amyjuanli.medium.com/use-yaml-front-matter-correctly-in-obsidian-550e4fa46a4a)
+
+[obsidian_bear (ruby) by @bernardoamc](https://github.com/bernardoamc/obsidian_bear)
+
+[Setting up Obsidian Sync with iCloud Drive by @philiprpowis](https://medium.com/@philiprpowis/setting-up-obsidian-sync-with-icloud-drive-459a14e5e070)
 
 ## License
 
