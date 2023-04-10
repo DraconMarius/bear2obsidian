@@ -13,8 +13,8 @@ A Node.js script to duplicate an export directory of Bear Markdown Files, while 
 - [ ] Require installation of node.js
 - [x] Tags with spaces
 > Tags with spaces will now create the folder using original name with spaces, but will fix the tag in the markdown itself with `_` so it can be recognised by Obsidian
-- [x] Create/Edit Time
-> Create/Edit Time as YAML implemented. Not sure if able to retain the created/edited time without explicitely writing it to the file.
+- [ ] Create/Edit Time
+> ~~Create/Edit Time as YAML implemented. Not sure if able to retain the created/edited time without explicitely writing it to the file.~~ in progress
 
 *please note that this is mainly to automate the transition, and make it a tad bit easier for myself. Instead of manually sorting through your notes one by one and creating a folder manually. Please keep in mind that you might still have to make some fine-tune and reorganize your notes once your got it imported to Obsidian!*
 
