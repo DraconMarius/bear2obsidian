@@ -28,15 +28,16 @@ filesAndFolders.forEach(entry => {
         // Add the creation date and edited date as YAML frontmatter
         content = addCreationAndEditedDateFrontmatter(content, entryPath);
 
-        // Find tags in the note 
-        const tagRegex = /(^|\s)#(?:(\w+\/(?:[\w\s-]+\/)*[\w\s-]+)|(\w+))(?!\w)/g;
-        const tags = [...content.matchAll(tagRegex)].map(match => match[2] || match[3]).map(tag => tag.trim());
-        // console.log(tags);
+        // Find tags in the note (working)
+        const firstTagRegex = /(^|\s)#(?:(\w+(?:\/\w+)*(?:\s+-\s+\w+)*\s*)|(\w+))(?!\w)/g;
+        const allTagRegex = /(^|\s)#(?:(\w+\/(?:[\w\s-]+\/)*[\w\s-]+)|(\w+))(?!\w)/g;
+        const tags = [...content.matchAll(firstTagRegex)].map(match => match[2] || match[3]).map(tag => tag.trim());
+        console.log(tags);
 
         // Replace Bear tags with Obsidian tags and formate highlight
         const obsidianContent = content
             .replace(/::([\s\S]*?)::/g, "==$1==")
-            .replace(tagRegex, (_, space, tagName1, tagName2) => {
+            .replaceAll(allTagRegex, (_, space, tagName1, tagName2) => {
                 const tagName = tagName1 || tagName2;
                 const cleanedTagName = tagName.replace(/\//g, '/');
                 const trimmedTagName = cleanedTagName.trim();
