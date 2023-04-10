@@ -1,7 +1,5 @@
 const fs = require('fs-extra');
 const path = require('path');
-//copySync copy dir with content inside
-const { copySync } = require('fs-extra');
 
 // Make sure to change to the correct source and destination path!
 const bearNotesFolderPath = './BearExport';
@@ -10,12 +8,12 @@ const obsidianVaultFolderPath = './ObsidianExport';
 // Read Bear notes and folders from the directory
 const filesAndFolders = fs.readdirSync(bearNotesFolderPath);
 
-function addCreationAndEditedDateFrontmatter(content, notePath) {
-    const creationDate = fs.statSync(notePath).birthtime.toISOString();
-    const editedDate = fs.statSync(notePath).mtime.toISOString();
-    const frontmatter = `---\ncreated: ${creationDate}\nmodified: ${editedDate}\n---\n\n`;
-    return frontmatter + content;
-}
+//switched to moving original file instead of using frontmatter
+
+// function addCreationAndEditedDateFrontmatter(content, creationDate, editedDate) {
+//     const frontmatter = `---\ncreated: ${creationDate}\nmodified: ${editedDate}\n---\n\n`;
+//     return frontmatter + content;
+// }
 
 filesAndFolders.forEach(entry => {
     const entryPath = path.join(bearNotesFolderPath, entry);
@@ -25,14 +23,19 @@ filesAndFolders.forEach(entry => {
     if (entryStats.isFile() && path.extname(entry) === '.md') {
         let content = fs.readFileSync(entryPath, 'utf8');
 
-        // Add the creation date and edited date as YAML frontmatter
-        content = addCreationAndEditedDateFrontmatter(content, entryPath);
+        // // Get the creation date and edited date from the file
+        // const creationDate = fs.statSync(entryPath).birthtime.toISOString();
+        // console.log(creationDate)
+        // const editedDate = fs.statSync(entryPath).mtime.toISOString();
+
+        // // Add the creation date and edited date as YAML frontmatter
+        // content = addCreationAndEditedDateFrontmatter(content, creationDate, editedDate);
 
         // Find tags in the note (working)
         const firstTagRegex = /(^|\s)#(?:(\w+(?:\/\w+)*(?:\s+-\s+\w+)*\s*)|(\w+))(?!\w)/g;
         const allTagRegex = /(^|\s)#(?:(\w+\/(?:[\w\s-]+\/)*[\w\s-]+)|(\w+))(?!\w)/g;
         const tags = [...content.matchAll(firstTagRegex)].map(match => match[2] || match[3]).map(tag => tag.trim());
-        console.log(tags);
+        // console.log(tags);
 
         // Replace Bear tags with Obsidian tags and formate highlight
         const obsidianContent = content
@@ -71,9 +74,11 @@ filesAndFolders.forEach(entry => {
             while (fs.existsSync(`${newNotePath}_${i}.md`)) {
                 i++;
             }
-            fs.writeFileSync(`${newNotePath}_${i}.md`, obsidianLinksContent);
+            fs.writeFileSync(entryPath, obsidianLinksContent); // Modify the file in place
+            fs.moveSync(entryPath, `${newNotePath}_${i}.md`, { preserveTimestamps: true }); // Copy the file to the new export folder
         } else {
-            fs.writeFileSync(newNotePath, obsidianLinksContent);
+            fs.writeFileSync(entryPath, obsidianLinksContent); // Modify the file in place
+            fs.moveSync(entryPath, newNotePath, { preserveTimestamps: true }); // Copy the file to the new export folder
         }
     }
 
@@ -82,7 +87,6 @@ filesAndFolders.forEach(entry => {
         const assetsFolderPath = path.join(obsidianVaultFolderPath, 'assets');
         fs.mkdirSync(assetsFolderPath, { recursive: true });
         const newFolderPath = path.join(assetsFolderPath, entry);
-        copySync(entryPath, newFolderPath);
+        fs.moveSync(entryPath, newFolderPath); // Move the folder to the new export folder
     }
 });
-

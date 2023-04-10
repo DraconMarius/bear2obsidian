@@ -13,8 +13,8 @@ A Node.js script to duplicate an export directory of Bear Markdown Files, while 
 - [ ] Require installation of node.js
 - [x] Tags with spaces
 > Tags with spaces will now create the folder using original name with spaces, but will fix the tag in the markdown itself with `_` so it can be recognised by Obsidian
-- [ ] Create/Edit Time
-> ~~Create/Edit Time as YAML implemented. Not sure if able to retain the created/edited time without explicitely writing it to the file.~~ in progress
+- [X] Create/ ~~Edit~~ Time
+> Ability to retain birthtime is implemented. Instead of copying over to new export folder after formatting, it directly write to the original file and moved it to the destination folder. Edit time then will be the imported time. (I wasn't able to get both, and end up prioritized file create time for now)
 
 *please note that this is mainly to automate the transition, and make it a tad bit easier for myself. Instead of manually sorting through your notes one by one and creating a folder manually. Please keep in mind that you might still have to make some fine-tune and reorganize your notes once your got it imported to Obsidian!*
 
@@ -22,7 +22,7 @@ A Node.js script to duplicate an export directory of Bear Markdown Files, while 
 
 **please make sure that you have the node.js installed**
 
-Make sure that you export your Bear note with attachements as Markdown to a new folder named `BearExport`. 
+Make sure that you export your Bear note with attachements as Markdown to a new folder named `BearExport`. *After implemnting the change that allow us to retain timestamps, this folder's content will be transformed and moved after running this script.
 
 > You can name the folder anything you want really, but you will have to edit the path to the source folder within the code:
 ```javascript
@@ -44,7 +44,7 @@ then:
 ``` bash
     npm start
 ```
-to initate the script. Once everything has been compiled, you should be able to see the previously empty `ObsidianExport` folder is now populated with content!
+to initate the script. Once everything has been compiled, you should be able to see the previously empty `ObsidianExport` folder is now populated with content, and the original `BearExport` folder is now empty.
 
 Now you can drag your content from the Obsidian Export folder into your Obsidian Vault Folder and then when you open Obsidian you should be able to access and start reorganizing your note in the new directory structure based off of your bear tag!
 
@@ -57,7 +57,8 @@ Here are some additional resources that was super helpful in my research to migr
 
 [Use YAML Front Matter Correctly in Obsidian by @amyjuanli](https://amyjuanli.medium.com/use-yaml-front-matter-correctly-in-obsidian-550e4fa46a4a)
 
-[obsidian_bear (ruby) by @bernardoamc](https://github.com/bernardoamc/obsidian_bear)
+[obsidian_bear by @bernardoamc](https://github.com/bernardoamc/obsidian_bear)
+
 
 
 ## License
