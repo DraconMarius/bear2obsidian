@@ -9,8 +9,10 @@ A Node.js script to duplicate an export directory of Bear Markdown Files, while 
 **Note**: 
 - [ ] Only read first tag in note (personal usecase)
 - [ ] Duplicated Note name not supported
-- [ ] Tags with spaces (#tag 1/sub tag#) will create folder, but thge obsidian tag itself might need manual fixing
 - [ ] Edge Cases in Tag formatting might experience errors
+- [ ] Require installation of node.js
+- [x] Tags with spaces
+> Tags with spaces will now create the folder using original name with spaces, but will fix the tag in the markdown itself with `_` so it can be recognised by Obsidian
 - [x] Create/Edit Time
 > Create/Edit Time as YAML implemented. Not sure if able to retain the created/edited time without explicitely writing it to the file.
 
@@ -47,7 +49,9 @@ to initate the script. Once everything has been compiled, you should be able to 
 Now you can drag your content from the Obsidian Export folder into your Obsidian Vault Folder and then when you open Obsidian you should be able to access and start reorganizing your note in the new directory structure based off of your bear tag!
 
 ## Additional Resources
-Here are some additional resources that was super helpful for my transistion to Bear and writing this simple script: 
+Here are some additional resources that was super helpful in my research to migrate from Bear and writing this simple script: 
+
+[Setting up Obsidian Sync with iCloud Drive by @philiprpowis](https://medium.com/@philiprpowis/setting-up-obsidian-sync-with-icloud-drive-459a14e5e070)
 
 [How to successfully move notes from Bear to Obsidian by @alexandersnotes](https://medium.com/@alexandersnotes/how-to-move-notes-from-bear-to-obsidian-2fb4f62cdd72)
 
@@ -55,7 +59,6 @@ Here are some additional resources that was super helpful for my transistion to 
 
 [obsidian_bear (ruby) by @bernardoamc](https://github.com/bernardoamc/obsidian_bear)
 
-[Setting up Obsidian Sync with iCloud Drive by @philiprpowis](https://medium.com/@philiprpowis/setting-up-obsidian-sync-with-icloud-drive-459a14e5e070)
 
 ## License
 
@@ -84,4 +87,4 @@ Feel free to let me know if you'd like to contribute, or if you have any idea fo
 
 For any questions, please reach out by creating an issue :)
 
-I created this mainly just to ease my transition to Obsidian, but if there is a specific use case that you would want me to take a look at please let me know!
+I created this mainly just to ease my migration to Obsidian, but if there is a specific use case that you would want me to take a look at please let me know!

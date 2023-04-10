@@ -28,17 +28,21 @@ filesAndFolders.forEach(entry => {
         // Add the creation date and edited date as YAML frontmatter
         content = addCreationAndEditedDateFrontmatter(content, entryPath);
 
-        // Find tags in the note
-        const tagRegex = /(^|\W)#(?:(\w+(?:\/\w+)*)|(\w+))(?!\w)/g;
+        // Find tags in the note try to
+        const tagRegex = /(^|\s)#(?:(\w+\/(?:[\w\s-]+\/)*[\w\s-]+)|(\w+))(?!\w)/g;
         const tags = [...content.matchAll(tagRegex)].map(match => match[2] || match[3]).map(tag => tag.trim());
-        console.log(tags);
+        // console.log(tags);
 
-        // Replace Bear tags with Obsidian tags
-        const obsidianContent = content.replace(tagRegex, (_, space, tagName1, tagName2) => {
-            const tagName = tagName1 || tagName2;
-            const cleanedTagName = tagName.replace(/\//g, '/');
-            return `${space}#${cleanedTagName}`;
-        });
+        // Replace Bear tags with Obsidian tags and formate highlight
+        const obsidianContent = content
+            .replace(/::([\s\S]*?)::/g, "==$1==")
+            .replace(tagRegex, (_, space, tagName1, tagName2) => {
+                const tagName = tagName1 || tagName2;
+                const cleanedTagName = tagName.replace(/\//g, '/');
+                const trimmedTagName = cleanedTagName.trim();
+                const tagWithoutSpaces = trimmedTagName.replace(/\s+/g, '_');
+                return `${space}#${tagWithoutSpaces}`;
+            });
 
         // Replace Bear-style note links with Obsidian-style note links
         const obsidianLinksContent = obsidianContent.replace(/\[{2}([^\]]+)\]{2}/g, (_, noteTitle) => `[[${noteTitle}]]`);
