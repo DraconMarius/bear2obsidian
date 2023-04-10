@@ -28,7 +28,7 @@ filesAndFolders.forEach(entry => {
         // Add the creation date and edited date as YAML frontmatter
         content = addCreationAndEditedDateFrontmatter(content, entryPath);
 
-        // Find tags in the note try to
+        // Find tags in the note 
         const tagRegex = /(^|\s)#(?:(\w+\/(?:[\w\s-]+\/)*[\w\s-]+)|(\w+))(?!\w)/g;
         const tags = [...content.matchAll(tagRegex)].map(match => match[2] || match[3]).map(tag => tag.trim());
         // console.log(tags);
