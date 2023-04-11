@@ -8,8 +8,13 @@ const obsidianVaultFolderPath = './ObsidianExport';
 // Read Bear notes and folders from the directory
 const filesAndFolders = fs.readdirSync(bearNotesFolderPath);
 
-//switched to moving original file instead of using frontmatter
+function updateFileDates(notePath, creationDate, editedDate) {
+    const birthtime = new Date(creationDate);
+    const mtime = new Date(editedDate);
+    fs.utimesSync(notePath, birthtime, mtime);
+}
 
+//switched to moving original file instead of using frontmatter
 // function addCreationAndEditedDateFrontmatter(content, creationDate, editedDate) {
 //     const frontmatter = `---\ncreated: ${creationDate}\nmodified: ${editedDate}\n---\n\n`;
 //     return frontmatter + content;
@@ -24,9 +29,9 @@ filesAndFolders.forEach(entry => {
         let content = fs.readFileSync(entryPath, 'utf8');
 
         // // Get the creation date and edited date from the file
-        // const creationDate = fs.statSync(entryPath).birthtime.toISOString();
+        const creationDate = fs.statSync(entryPath).birthtime.toISOString();
         // console.log(creationDate)
-        // const editedDate = fs.statSync(entryPath).mtime.toISOString();
+        const editedDate = fs.statSync(entryPath).mtime.toISOString();
 
         // // Add the creation date and edited date as YAML frontmatter
         // content = addCreationAndEditedDateFrontmatter(content, creationDate, editedDate);
@@ -76,9 +81,11 @@ filesAndFolders.forEach(entry => {
             }
             fs.writeFileSync(entryPath, obsidianLinksContent); // Modify the file in place
             fs.moveSync(entryPath, `${newNotePath}_${i}.md`, { preserveTimestamps: true }); // Copy the file to the new export folder
+            updateFileDates(`${newNotePath}_${i}.md`, creationDate, editedDate); //attempt to update original mTime instead ot when this is run
         } else {
             fs.writeFileSync(entryPath, obsidianLinksContent); // Modify the file in place
             fs.moveSync(entryPath, newNotePath, { preserveTimestamps: true }); // Copy the file to the new export folder
+            updateFileDates(newNotePath, creationDate, editedDate);
         }
     }
 

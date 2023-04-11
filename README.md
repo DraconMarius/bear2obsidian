@@ -4,7 +4,7 @@
 
 ## Description
 
-A Node.js script to duplicate an export directory of Bear Markdown Files, while mimicking folder structures based on BearTags. It groups all the exported assets, and edits any backlinks so one can easily export to Obsidian. It also reads the create/edit time for the files and prepend it as a YAML block to the export for Obsidian.
+A Node.js script to duplicate an export directory of Bear Markdown Files, while mimicking folder structures based on BearTags. It groups all the exported assets, and edits any backlinks so one can easily export to Obsidian. It ~~also reads the create/edit time for the files and prepend it as a YAML block~~ now retain the edited and creation time.
 
 **Note**: 
 - [ ] Only read first tag in note (personal usecase)
@@ -13,8 +13,8 @@ A Node.js script to duplicate an export directory of Bear Markdown Files, while 
 - [ ] Require installation of node.js
 - [x] Tags with spaces
 > Tags with spaces will now create the folder using original name with spaces, but will fix the tag in the markdown itself with `_` so it can be recognised by Obsidian
-- [X] Create/ ~~Edit~~ Time
-> Ability to retain birthtime is implemented. Instead of copying over to new export folder after formatting, it directly write to the original file and moved it to the destination folder. Edit time then will be the imported time. (I wasn't able to get both, and end up prioritized file create time for now)
+- [X] Create/ Edit Time
+> Implemented. Instead of copying over to new export folder after formatting, it directly write to the original file and then moved to the destination folder. ~~(I wasn't able to get both, and end up prioritized file create time for now)~~
 
 *please note that this is mainly to automate the transition, and make it a tad bit easier for myself. Instead of manually sorting through your notes one by one and creating a folder manually. Please keep in mind that you might still have to make some fine-tune and reorganize your notes once your got it imported to Obsidian!*
 
