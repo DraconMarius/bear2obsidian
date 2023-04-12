@@ -9,7 +9,8 @@ A Node.js script to duplicate an export directory of Bear Markdown Files, while 
 **Note**: 
 - [ ] Only read first tag in note (personal usecase)
 - [ ] Duplicated Note name not supported
-- [ ] Edge Cases in Tag formatting might experience errors
+- [x] Edge Cases in Tag formatting might experience errors
+> improved tag parsing, please submnit an issue if you do experience any
 - [ ] Require installation of node.js
 - [x] Tags with spaces
 > Tags with spaces will now create the folder using original name with spaces, but will fix the tag in the markdown itself with `_` so it can be recognised by Obsidian
