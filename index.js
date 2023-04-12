@@ -20,6 +20,18 @@ function updateFileDates(notePath, creationDate, editedDate) {
 //     return frontmatter + content;
 // }
 
+const removeSpacesFromEnclosedTags = (match, space, tagName) => {
+    const cleanedTagName = tagName.replace(/\//g, '/');
+    const trimmedTagName = cleanedTagName.trim();
+
+    // Replace spaces within the tag with underscores
+    const tagWithUnderscores = trimmedTagName.replace(/\s+/g, '_');
+
+    // Add a space after the tag if there was a space before the tag and the tag is not at the start of the line
+    const trailingSpace = space ? ' ' : '';
+    return `${space}#${tagWithUnderscores}#${trailingSpace}`;
+};
+
 filesAndFolders.forEach(entry => {
     const entryPath = path.join(bearNotesFolderPath, entry);
     const entryStats = fs.statSync(entryPath);
@@ -38,20 +50,18 @@ filesAndFolders.forEach(entry => {
 
         // Find tags in the note (working)
         const firstTagRegex = /(^|\s)#(?:(\w+(?:\/\w+)*(?:\s+-\s+\w+)*\s*)|(\w+))(?!\w)/g;
-        const allTagRegex = /(^|\s)#(?:(\w+\/(?:[\w\s-]+\/)*[\w\s-]+)|(\w+))(?!\w)/g;
+        const enclosedTagRegex = /(^|\s)#((?:\w+(?:\/[\w\s-]+)*\/[\w\s-]+)|\w+)#(?!\w|#)/g;
+
+
         const tags = [...content.matchAll(firstTagRegex)].map(match => match[2] || match[3]).map(tag => tag.trim());
         // console.log(tags);
 
-        // Replace Bear tags with Obsidian tags and formate highlight
+
+        // Replace Bear tags with Obsidian tags and format highlight
         const obsidianContent = content
             .replace(/::([\s\S]*?)::/g, "==$1==")
-            .replaceAll(allTagRegex, (_, space, tagName1, tagName2) => {
-                const tagName = tagName1 || tagName2;
-                const cleanedTagName = tagName.replace(/\//g, '/');
-                const trimmedTagName = cleanedTagName.trim();
-                const tagWithoutSpaces = trimmedTagName.replace(/\s+/g, '_');
-                return `${space}#${tagWithoutSpaces}`;
-            });
+            .replaceAll(enclosedTagRegex, removeSpacesFromEnclosedTags);
+
 
         // Replace Bear-style note links with Obsidian-style note links
         const obsidianLinksContent = obsidianContent.replace(/\[{2}([^\]]+)\]{2}/g, (_, noteTitle) => `[[${noteTitle}]]`);
@@ -91,7 +101,7 @@ filesAndFolders.forEach(entry => {
 
     // If the entry is a folder (attachments)
     if (entryStats.isDirectory()) {
-        const assetsFolderPath = path.join(obsidianVaultFolderPath, 'assets');
+        const assetsFolderPath = path.join(obsidianVaultFolderPath, 'Assets');
         fs.mkdirSync(assetsFolderPath, { recursive: true });
         const newFolderPath = path.join(assetsFolderPath, entry);
         fs.moveSync(entryPath, newFolderPath); // Move the folder to the new export folder
