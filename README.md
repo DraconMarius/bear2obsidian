@@ -6,6 +6,8 @@
 
 A Node.js script to duplicate an export directory of Bear Markdown Files, while mimicking folder structures based on BearTags. It groups all the exported assets, and edits any backlinks so one can easily export to Obsidian. It ~~also reads the create/edit time for the files and prepend it as a YAML block~~ now retain the edited and creation time.
 
+![demo.gif](./aseets/demo.gif)
+
 **Note**: 
 - [ ] Only read first tag in note (personal usecase)
 - [ ] Duplicated Note name not supported
